@@ -2,6 +2,15 @@ name: Build Kernel
 
 on:
   workflow_dispatch:
+    inputs:
+      clang_version:
+        description: 'Choose clang version '
+        required: true
+        default: '12'
+        type: choice
+        options:
+          - '12'
+          - '18'
 
 jobs:
   build:
@@ -26,7 +35,13 @@ jobs:
 
       - name: Setup Clang
         run: |
-          git clone -b main --depth=1 https://github.com/xxblebleblexx/zyc-clang12.git clang
+          if [ "${{ github.event.inputs.clang_version }}" = "12" ]; then
+            echo "--- Setup Clang 12 (zyc-clang) ---"
+            git clone -b clang-12 --depth=1 https://github.com/xxblebleblexx/zyc-clang.git clang
+          else
+            echo "--- Setup Clang 18 (zyc-clang) ---"
+            git clone -b clang-18 --depth=1 https://github.com/xxblebleblexx/zyc-clang.git clang
+          fi
           echo "$GITHUB_WORKSPACE/clang/bin" >> $GITHUB_PATH
 
       - name: Verify Clang Version
