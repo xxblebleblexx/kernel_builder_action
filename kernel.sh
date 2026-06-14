@@ -1,6 +1,6 @@
 #CONFIGURATION
 kernelsource=https://android.googlesource.com/kernel/common # Must be edited
-kernelname=Galactic # No need to edit
+kernelname=Galactic #Must be edited
 branch_kernel=android15-6.6-lts # Must be edited
 defconfig_path=arch/arm64/configs/gki_defconfig # No need to edit
 defconfig=${defconfig_path##*/}
