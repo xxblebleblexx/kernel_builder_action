@@ -19,7 +19,7 @@ jobs:
          sudo apt install -y make patch curl git llvm lld build-essential libncurses-dev libssl-dev bc flex bison rsync kmod cpio python3 gcc-aarch64-linux-gnu binutils-aarch64-linux-gnu patch ccache && wget https://github.com/greenforce-project/greenforce_clang/releases/download/20260523/gf-clang-23.0.0-20260523.tar.gz && mkdir -p clang && mv gf-clang-23.0.0-20260523.tar.gz clang/clang.tar.gz && cd clang && tar -xvzf clang.tar.gz && export PATH="/home/runner/work/kernel_builder_action/kernel_builder_action/clang/bin:$PATH" && clang --version
 
       - name: Run Build Script
-        run: wget https://raw.githubusercontent.com/xxblebleblexx/kernel_builder_action/refs/heads/main/kernel.sh; chmod +x kernel.sh;printf "Y\n2\n\n\n\nY\n" | sh kernel.sh
+        run: wget https://raw.githubusercontent.com/xxblebleblexx/kernel_builder_action/refs/heads/main/kernel.sh; chmod +x kernel.sh; sh kernel.sh
 
       - name: Upload image.gz
         uses: actions/upload-artifact@v4
