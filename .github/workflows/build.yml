@@ -17,8 +17,12 @@ jobs:
       - name: Install Dependencies and setup clang
         run: |
          sudo apt update -y; sudo apt install -y make patch curl git llvm lld build-essential libncurses-dev libssl-dev bc flex bison rsync kmod cpio python3 gcc-aarch64-linux-gnu binutils-aarch64-linux-gnu patch ccache && wget https://github.com/greenforce-project/greenforce_clang/releases/download/20260523/gf-clang-23.0.0-20260523.tar.gz && mkdir -p clang && mv gf-clang-23.0.0-20260523.tar.gz clang/clang.tar.gz && cd clang && tar -xvzf clang.tar.gz && export PATH="/home/runner/work/kernel_builder_action/kernel_builder_action/clang/bin:$PATH" && clang --version
-          sudo fallocate -l 6G /swapfile;sudo chmod 600 /swapfile;sudo mkswap /swapfile;sudo swapon /swapfile
-          
+         
+      - name: Add Swap
+        uses: pierrebritz/setup-swap-space@v1
+        with:
+          swap-size-gb: 6
+        
       - name: Run Build Script
         run: wget https://raw.githubusercontent.com/xxblebleblexx/kernel_builder_action/refs/heads/main/kernel.sh; chmod +x kernel.sh; sh kernel.sh
 
