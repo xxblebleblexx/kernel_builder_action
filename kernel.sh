@@ -30,4 +30,4 @@ echo "CONFIG_KSU_MANUAL_HOOK=y" >> $defconfig_path
 wget https://raw.githubusercontent.com/xxblebleblexx/manual_hook_fix/refs/heads/main/manualhook_1.6_fixed.patch;wait;patch -p1 < manualhook_1.6_fixed.patch
 fi
 
-make O=out ARCH=arm64 $defconfig; printf "Y\n2\n\n\n\nY\n" | make -j2 CC=clang O=out ARCH=arm64 LLVM=1 LLVM_IAS=1 LD=ld.lld AS=llvm-as AR=llvm-ar NM=llvm-nm OBJCOPY=llvm-objcopy OBJDUMP=llvm-objdump READELF=llvm-readelf STRIP=llvm-strip CROSS_COMPILE=aarch64-linux-gnu- KCFLAGS="-Wl,--thinlto-jobs=2" LDFLAGS="-Wl,--thinlto-jobs=2"
+make O=out ARCH=arm64 $defconfig; printf "Y\n2\n\n\n\nY\n" | make -j$(nproc --all) CC=clang O=out ARCH=arm64 LLVM=1 LLVM_IAS=1 LD=ld.lld AS=llvm-as AR=llvm-ar NM=llvm-nm OBJCOPY=llvm-objcopy OBJDUMP=llvm-objdump READELF=llvm-readelf STRIP=llvm-strip CROSS_COMPILE=aarch64-linux-gnu-
