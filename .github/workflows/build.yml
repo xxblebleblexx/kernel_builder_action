@@ -11,24 +11,50 @@ jobs:
       contents: write
 
     steps:
-      - name: Check Disk Space
-        run: df -h
-        
       - name: Checkout Source
         uses: actions/checkout@v4
 
-      - name: Install Dependencies and setup clang
-        run: |
-         sudo apt update -y; sudo apt install -y make patch curl git llvm lld build-essential libncurses-dev libssl-dev bc flex bison rsync kmod cpio python3 gcc-aarch64-linux-gnu binutils-aarch64-linux-gnu patch ccache && wget https://github.com/greenforce-project/greenforce_clang/releases/download/20260523/gf-clang-23.0.0-20260523.tar.gz && mkdir -p clang && mv gf-clang-23.0.0-20260523.tar.gz clang/clang.tar.gz && cd clang && tar -xvzf clang.tar.gz && export PATH="/home/runner/work/kernel_builder_action/kernel_builder_action/clang/bin:$PATH" && clang --version
-         
-      - name: Add Swap
-        uses: actionhippie/swap-space@v1
+      # 1. Maksimalkan Ruang Disk & Set Swap Besar (Menghindari OOM / Broken Pipe)
+      - name: Maximize Build Space & Setup Swap
+        uses: easimon/maximize-build-space@master
         with:
-          size: 4G
+          root-reserve-mb: 5120
+          swap-size-mb: 12288 # Swap 12 GB untuk menampung beban LTO LLVM
+          remove-dotnet: 'true'
+          remove-android: 'true'
+          remove-haskell: 'true'
+
+      - name: Check Disk Space
+        run: df -h
+        
+      - name: Install Dependencies
+        run: |
+          sudo apt update -y
+          sudo apt install -y make patch curl git llvm lld build-essential \
+            libncurses-dev libssl-dev bc flex bison rsync kmod cpio python3 \
+            gcc-aarch64-linux-gnu binutils-aarch64-linux-gnu ccache
+
+      # 2. Setup Clang dan masukkan ke GITHUB_PATH agar persisten antar step
+      - name: Setup Greenforce Clang
+        run: |
+          wget https://github.com/greenforce-project/greenforce_clang/releases/download/20260523/gf-clang-23.0.0-20260523.tar.gz
+          mkdir -p $GITHUB_WORKSPACE/clang
+          tar -xzf gf-clang-23.0.0-20260523.tar.gz -C $GITHUB_WORKSPACE/clang
+          
+          # Ini adalah cara resmi GitHub Actions agar PATH terbaca di step berikutnya
+          echo "$GITHUB_WORKSPACE/clang/bin" >> $GITHUB_PATH
+
+      # 3. Verifikasi apakah Clang yang benar sudah terbaca secara global
+      - name: Verify Clang Version
+        run: clang --version
         
       - name: Run Build Script
-        run: wget https://raw.githubusercontent.com/xxblebleblexx/kernel_builder_action/refs/heads/main/kernel.sh; chmod +x kernel.sh; sh kernel.sh
+        run: |
+          wget https://raw.githubusercontent.com/xxblebleblexx/kernel_builder_action/refs/heads/main/kernel.sh
+          chmod +x kernel.sh
+          sh kernel.sh
 
+      # --- Bagian Upload Artifact (Tetap Sama) ---
       - name: Upload image.gz
         uses: actions/upload-artifact@v4
         with:
