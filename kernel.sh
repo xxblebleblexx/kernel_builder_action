@@ -3,7 +3,7 @@ kernelsource=https://github.com/xxblebleblexx/moonbeam_gale_kernel.git # Must be
 kernelname=$(basename "$kernelsource" .git) # No need to edit
 branch_kernel=moonbeam # Must be edited
 defconfig_path=arch/arm64/configs/gale_defconfig # Must be edited
-defconfig=${defconfig_path##*/}
+defconfig=gale_defconfig # Must be edited
 fast_path=$GITHUB_WORKSPACE # This where kernelsource saved
 hooks=manual #only manual hook/kprobes hook, must be edited
 
