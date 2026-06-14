@@ -4,7 +4,6 @@ kernelname=$(basename "$kernelsource" .git) # No need to edit
 branch_kernel=moonbeam # Must be edited
 defconfig_path=arch/arm64/configs/gale_defconfig # Must be edited
 defconfig=${defconfig_path##*/}
-clang_path=$GITHUB_WORKSPACE/clang/bin # No need to edit
 fast_path=$GITHUB_WORKSPACE # This where kernelsource saved
 hooks=manual #only manual hook/kprobes hook, must be edited
 
@@ -30,7 +29,5 @@ if [ "$hooks" = "manual" ]; then
 echo "CONFIG_KSU_MANUAL_HOOK=y" >> $defconfig_path
 wget https://raw.githubusercontent.com/xxblebleblexx/manual_hook_fix/refs/heads/main/manualhook_1.6_fixed.patch;wait;patch -p1 < manualhook_1.6_fixed.patch
 fi
-
-export PATH=$clang_path:$PATH
 
 make O=out ARCH=arm64 $defconfig; printf "Y\n2\n\n\n\nY\n" | make -j2 CC=clang O=out ARCH=arm64 LLVM=1 LLVM_IAS=1 LD=ld.lld AS=llvm-as AR=llvm-ar NM=llvm-nm OBJCOPY=llvm-objcopy OBJDUMP=llvm-objdump READELF=llvm-readelf STRIP=llvm-strip CROSS_COMPILE=aarch64-linux-gnu-
