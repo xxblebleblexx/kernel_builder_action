@@ -4,8 +4,8 @@ kernelname=$(basename "$kernelsource" .git) # No need to edit
 branch_kernel=moonbeam # Must be edited
 defconfig_path=arch/arm64/configs/gale_defconfig # Must be edited
 defconfig=${defconfig_path##*/}
-clang_path=/home/runner/work/kernel_builder_action/kernel_builder_action/clang/bin # No need to edit
-fast_path=/home/runner/work/kernel_builder_action/kernel_builder_action # This where kernelsource saved
+clang_path=$GITHUB_WORKSPACE/clang/bin # No need to edit
+fast_path=$GITHUB_WORKSPACE # This where kernelsource saved
 hooks=manual #only manual hook/kprobes hook, must be edited
 
 cd $fast_path
