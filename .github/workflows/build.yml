@@ -11,18 +11,18 @@ jobs:
       contents: write
 
     steps:
-      - name: Checkout Source
-        uses: actions/checkout@v4
-
-      # 1. Maksimalkan Ruang Disk & Set Swap Besar (Menghindari OOM / Broken Pipe)
-      - name: Maximize Build Space & Setup Swap
+      - name: Maximize Build Space & Free Disk Space
         uses: easimon/maximize-build-space@master
         with:
           root-reserve-mb: 5120
-          swap-size-mb: 12288 # Swap 12 GB untuk menampung beban LTO LLVM
+          swap-size-mb: 10244
           remove-dotnet: 'true'
           remove-android: 'true'
           remove-haskell: 'true'
+          remove-codeql: 'true'
+
+      - name: Checkout Source
+        uses: actions/checkout@v4
 
       - name: Check Disk Space
         run: df -h
@@ -34,17 +34,13 @@ jobs:
             libncurses-dev libssl-dev bc flex bison rsync kmod cpio python3 \
             gcc-aarch64-linux-gnu binutils-aarch64-linux-gnu ccache
 
-      # 2. Setup Clang dan masukkan ke GITHUB_PATH agar persisten antar step
       - name: Setup Greenforce Clang
         run: |
           wget https://github.com/greenforce-project/greenforce_clang/releases/download/20260523/gf-clang-23.0.0-20260523.tar.gz
           mkdir -p $GITHUB_WORKSPACE/clang
           tar -xzf gf-clang-23.0.0-20260523.tar.gz -C $GITHUB_WORKSPACE/clang
-          
-          # Ini adalah cara resmi GitHub Actions agar PATH terbaca di step berikutnya
           echo "$GITHUB_WORKSPACE/clang/bin" >> $GITHUB_PATH
 
-      # 3. Verifikasi apakah Clang yang benar sudah terbaca secara global
       - name: Verify Clang Version
         run: clang --version
         
@@ -54,7 +50,6 @@ jobs:
           chmod +x kernel.sh
           sh kernel.sh
 
-      # --- Bagian Upload Artifact (Tetap Sama) ---
       - name: Upload image.gz
         uses: actions/upload-artifact@v4
         with:
