@@ -38,25 +38,35 @@ jobs:
           chmod +x kernel.sh
           sh kernel.sh
 
+      - name: Prepare image.gz
+        run: |
+          mkdir -p dir_image_gz
+          find . -type f \( -name "image.gz" -o -name "Image.gz" \) -exec cp {} dir_image_gz/ \;
+      
       - name: Upload image.gz
         uses: actions/upload-artifact@v4
         with:
           name: image-gz
-          path: |
-            **/image.gz
-            **/Image.gz
+          path: dir_image_gz/
 
+      - name: Prepare image.gz-dtb
+        run: |
+          mkdir -p dir_dtb
+          find . -type f \( -name "image.gz-dtb" -o -name "Image.gz-dtb" \) -exec cp {} dir_dtb/ \;
+      
       - name: Upload image.gz-dtb
         uses: actions/upload-artifact@v4
         with:
           name: image-gz-dtb
-          path: |
-            **/image.gz-dtb
-            **/Image.gz-dtb
+          path: dir_dtb/
 
+      - name: Prepare Image
+        run: |
+          mkdir -p dir_image
+          find . -type f -name "Image" -exec cp {} dir_image/ \;
+      
       - name: Upload Image
         uses: actions/upload-artifact@v4
         with:
           name: image
-          path: |
-            **/Image
+          path: dir_image/
