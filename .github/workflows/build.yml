@@ -1,0 +1,49 @@
+name: Build Kernel
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+      - master
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout Source
+        uses: actions/checkout@v4
+
+      - name: Install Dependencies and setup clang
+        run: |
+          apt update -y && apt upgrade -y && apt install -y git llvm lld build-essential libncurses-dev libssl-dev bc flex bison rsync kmod cpio python3 gcc-aarch64-linux-gnu binutils-aarch64-linux-gnu patch ccache && wget https://github.com/greenforce-project/greenforce_clang/releases/download/20260523/gf-clang-23.0.0-20260523.tar.gz && mkdir -p clang && mv gf-clang-23.0.0-20260523.tar.gz clang/clang.tar.gz && cd clang && tar -xvzf clang.tar.gz && export PATH="/content/clang/bin:$PATH" && clang --version
+
+      - name: Run Build Script
+        run: 
+
+      - name: Upload image.gz
+        uses: actions/upload-artifact@v4
+        with:
+          name: image-gz
+          path: |
+            **/image.gz
+            **/Image.gz
+
+      - name: Upload image.gz-dtb
+        uses: actions/upload-artifact@v4
+        with:
+          name: image-gz-dtb
+          path: |
+            **/image.gz-dtb
+            **/Image.gz-dtb
+
+      - name: Upload Image
+        uses: actions/upload-artifact@v4
+        with:
+          name: image
+          path: |
+            **/Image
