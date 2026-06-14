@@ -24,11 +24,9 @@ jobs:
             libncurses-dev libssl-dev bc flex bison rsync kmod cpio python3 \
             gcc-aarch64-linux-gnu binutils-aarch64-linux-gnu ccache
 
-      - name: Setup Greenforce Clang
+      - name: Setup Clang
         run: |
-          wget https://github.com/greenforce-project/greenforce_clang/releases/download/20260523/gf-clang-23.0.0-20260523.tar.gz
-          mkdir -p $GITHUB_WORKSPACE/clang
-          tar -xzf gf-clang-23.0.0-20260523.tar.gz -C $GITHUB_WORKSPACE/clang
+          git clone -b main --depth=1 https://github.com/xxblebleblexx/zyc-clang12.git clang
           echo "$GITHUB_WORKSPACE/clang/bin" >> $GITHUB_PATH
 
       - name: Verify Clang Version
