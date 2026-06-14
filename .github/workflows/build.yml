@@ -33,14 +33,20 @@ jobs:
             libncurses-dev libssl-dev bc flex bison rsync kmod cpio python3 \
             gcc-aarch64-linux-gnu binutils-aarch64-linux-gnu ccache
 
-      - name: Setup Clang
+      - name: Setup Official Android Clang
         run: |
           if [ "${{ github.event.inputs.clang_version }}" = "12" ]; then
-            echo "--- Setup Clang 12 (zyc-clang) ---"
-            git clone -b clang-12 --depth=1 https://github.com/xxblebleblexx/zyc-clang.git clang
+            echo "--- Setup Official Android Clang 12 (r416183b) ---"
+            mkdir -p $GITHUB_WORKSPACE/clang
+            curl -LO https://android.googlesource.com/platform/prebuilts/clang/host/linux-x86/+archive/refs/heads/android12-release/clang-r416183b.tar.gz
+            tar -xzf clang-r416183b.tar.gz -C $GITHUB_WORKSPACE/clang
+            rm clang-r416183b.tar.gz
           else
-            echo "--- Setup Clang 18 (zyc-clang) ---"
-            git clone -b clang-18 --depth=1 https://github.com/xxblebleblexx/zyc-clang.git clang
+            echo "--- Setup Official Android Clang 18 (r522817) ---"
+            mkdir -p $GITHUB_WORKSPACE/clang
+            curl -LO https://android.googlesource.com/platform/prebuilts/clang/host/linux-x86/+archive/refs/heads/main-release/clang-r522817.tar.gz
+            tar -xzf clang-r522817.tar.gz -C $GITHUB_WORKSPACE/clang
+            rm clang-r522817.tar.gz
           fi
           echo "$GITHUB_WORKSPACE/clang/bin" >> $GITHUB_PATH
 
