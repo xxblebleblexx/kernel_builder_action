@@ -11,7 +11,7 @@ compile_type=${helper%%-*}
 mkdir -p gki
 cd $fast_path
 #download kernel source from aosp
-repo init -u $kernelsource -b $branch_kernel --depth=1 ;wait;sudo repo sync -c -j$(nproc) --no-clone-bundle --no-tags
+repo init -u $kernelsource -b $branch_kernel --depth=1 ;wait;repo sync -c -j$(nproc) --no-clone-bundle --no-tags
 
 cd common
 #Set name for linux kernel
