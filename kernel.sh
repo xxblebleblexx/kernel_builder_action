@@ -1,22 +1,37 @@
-#CONFIGURATION
+#HEAD_CONFIGURATION
 kernelsource=https://android.googlesource.com/kernel/manifest # No need to edit
 kernelname=Galactic #Must be edited
 branch_kernel=common-android15-6.6-lts # Must be edited
 defconfig_path=arch/arm64/configs/gki_defconfig # No need to edit
-defconfig=gki_defconfig
+defconfig=gki_defconfig # No need to edit
 fast_path=$GITHUB_WORKSPACE/gki # This where kernelsource saved
-helper=${branch_kernel#*-}
-compile_type=${helper%%-*}
+helper=${branch_kernel#*-} # No need to edit
+compile_type=${helper%%-*} # No need to edit
+ #USE OWN SOURCE KERNEL
+use_own_kernel=n # y/n 
+link_ur_kernel=https://github.com/xxblebleblexx/kernel_common.git #Must be edited
+branch_ur_kernel=gki-6.6-lts #Must be edited
+#END_CONFIGURATION
 
 mkdir -p gki
 cd $fast_path
 #download kernel source from aosp
 repo init -u $kernelsource -b $branch_kernel --depth=1 ;wait;repo sync -c -j$(nproc) --no-clone-bundle --no-tags
 
+if [ "$use_own_kernel" = "y" ]; then
+rm -rf common
+git clone -b $branch_ur_kernel --depth=1 $link_ur_kernel common
+fi
+
 cd common
+
+if [ "$use_own_kernel" = "n" ]; then
 #Set name for linux kernel
 echo "CONFIG_LOCALVERSION=\"-$kernelname-LTS\"" >> $defconfig_path
+fi
+
 echo "CONFIG_LOCALVERSION_AUTO=n" >> $defconfig_path
+
 #KSU DRIVER
 curl -LSs "https://raw.githubusercontent.com/KernelSU-Next/KernelSU-Next/next/kernel/setup.sh" | bash -s stable
 #KSU ACTIVATION
