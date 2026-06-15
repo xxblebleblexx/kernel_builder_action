@@ -2,15 +2,6 @@ name: Build Kernel
 
 on:
   workflow_dispatch:
-    inputs:
-      clang_version:
-        description: 'Choose clang version '
-        required: true
-        default: '12'
-        type: choice
-        options:
-          - '12'
-          - '18'
 
 jobs:
   build:
@@ -31,27 +22,7 @@ jobs:
           sudo apt update -y
           sudo apt install -y make patch curl git llvm lld build-essential \
             libncurses-dev libssl-dev bc flex bison rsync kmod cpio python3 \
-            gcc-aarch64-linux-gnu binutils-aarch64-linux-gnu ccache
-
-      - name: Setup Official Android Clang
-        run: |
-          if [ "${{ github.event.inputs.clang_version }}" = "12" ]; then
-            echo "--- Setup Official Android Clang 12 (r416183b) ---"
-            mkdir -p $GITHUB_WORKSPACE/clang
-            curl -LO https://android.googlesource.com/platform/prebuilts/clang/host/linux-x86/+archive/refs/heads/android12-release/clang-r416183b.tar.gz
-            tar -xzf clang-r416183b.tar.gz -C $GITHUB_WORKSPACE/clang
-            rm clang-r416183b.tar.gz
-          else
-            echo "--- Setup Official Android Clang 18 (r522817) ---"
-            mkdir -p $GITHUB_WORKSPACE/clang
-            curl -LO https://android.googlesource.com/platform/prebuilts/clang/host/linux-x86/+archive/refs/heads/main-release/clang-r522817.tar.gz
-            tar -xzf clang-r522817.tar.gz -C $GITHUB_WORKSPACE/clang
-            rm clang-r522817.tar.gz
-          fi
-          echo "$GITHUB_WORKSPACE/clang/bin" >> $GITHUB_PATH
-
-      - name: Verify Clang Version
-        run: clang --version
+            gcc-aarch64-linux-gnu binutils-aarch64-linux-gnu ccache repo
         
       - name: Run Build Script
         run: |
@@ -69,17 +40,6 @@ jobs:
         with:
           name: image-gz
           path: dir_image_gz/
-
-      - name: Prepare image.gz-dtb
-        run: |
-          mkdir -p dir_dtb
-          find . -type f \( -name "image.gz-dtb" -o -name "Image.gz-dtb" \) -exec cp {} dir_dtb/ \;
-      
-      - name: Upload image.gz-dtb
-        uses: actions/upload-artifact@v4
-        with:
-          name: image-gz-dtb
-          path: dir_dtb/
 
       - name: Prepare Image
         run: |
