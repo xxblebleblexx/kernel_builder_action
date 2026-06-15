@@ -13,11 +13,11 @@ git clone -b $branch_kernel --depth=1 $kernelsource;wait
 cd $fast_path/$kernelname
 
 #KSU DRIVER
-if [ "$susfs" = "y" ]; then
+if [ "$susfs" = "n" ]; then
 curl -LSs "https://raw.githubusercontent.com/xxblebleblexx/MultiSU/refs/heads/legacy/kernel/setup.sh" | bash -s legacy
 fi
 
-if [ "$susfs" = "n" ]; then
+if [ "$susfs" = "y" ]; then
 curl -LSs "https://raw.githubusercontent.com/xxblebleblexx/MultiSU/refs/heads/legacy/kernel/setup.sh" | bash -s legacy_susfs
 fi
 
