@@ -22,8 +22,17 @@ jobs:
           sudo apt update -y
           sudo apt install -y make patch curl git llvm lld build-essential \
             libncurses-dev libssl-dev bc flex bison rsync kmod cpio python3 \
-            gcc-aarch64-linux-gnu binutils-aarch64-linux-gnu ccache repo
-        
+            gcc-aarch64-linux-gnu binutils-aarch64-linux-gnu ccache
+          mkdir -p $HOME/bin
+          curl https://storage.googleapis.com/git-repo-downloads/repo > $HOME/bin/repo
+          chmod a+x $HOME/bin/repo
+          echo "$HOME/bin" >> $GITHUB_PATH
+
+          git config --global user.name "runner"
+          git config --global user.email "runner@kernel.local"
+          git config --global color.ui false
+          git config --global --add safe.directory '*'
+          
       - name: Run Build Script
         run: |
           wget https://raw.githubusercontent.com/xxblebleblexx/kernel_builder_action/refs/heads/$GITHUB_REF_NAME/kernel.sh
