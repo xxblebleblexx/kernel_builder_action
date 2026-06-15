@@ -27,10 +27,14 @@ sed -i 's/POST_DEFCONFIG_CMDS="check_defconfig"/POST_DEFCONFIG_CMDS=""/g' build.
 sed -i 'd' android/abi_gki_protected_exports_aarch64
 #Compile
 cd ../
-if [[ "$compile_type" =~ ^android(13|14|15|16)$ ]]; then
-tools/bazel build --config=fast //common:kernel_aarch64_dist
-fi
 
-if [ "$compile_type" = "android12" ]; then
-LTO=thin BUILD_CONFIG=common/build.config.gki.aarch64 build/build.sh
-fi
+cd $fast_path
+
+case "$compile_type" in
+    android13|android14|android15|android16)
+        ./tools/bazel build --config=fast //common:kernel_aarch64_dist
+        ;;
+    android12)
+        LTO=thin BUILD_CONFIG=common/build.config.gki.aarch64 build/build.sh
+        ;;
+esac
