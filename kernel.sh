@@ -1,11 +1,12 @@
 #CONFIGURATION
-kernelsource=https://github.com/xxblebleblexx/moonbeam_gale_kernel.git # Must be edited
+kernelsource=https://github.com/deryardi73/android_kernel_xiaomi_fire.git # Must be edited
 kernelname=$(basename "$kernelsource" .git) # No need to edit
-branch_kernel=non-oc-moonbeam # Must be edited
-defconfig_path=arch/arm64/configs/gale_defconfig # Must be edited
-defconfig=gale_defconfig # Must be edited
+branch_kernel=inferno # Must be edited
+defconfig_path=arch/arm64/configs/fire_defconfig # Must be edited
+defconfig=fire_defconfig # Must be edited
 fast_path=$GITHUB_WORKSPACE # This where kernelsource saved
 hooks=manual #only manual hook/kprobes hook, must be edited
+susfs=y # only 4.19
 
 cd $fast_path
 git clone -b $branch_kernel --depth=1 $kernelsource;wait
@@ -29,5 +30,8 @@ if [ "$hooks" = "manual" ]; then
 echo "CONFIG_KSU_MANUAL_HOOK=y" >> $defconfig_path
 wget https://raw.githubusercontent.com/xxblebleblexx/manual_hook_fix/refs/heads/main/manualhook_1.6_fixed.patch;wait;patch -p1 < manualhook_1.6_fixed.patch
 fi
+
+if [ "$susfs" = "y" ]; then
+wget https://raw.githubusercontent.com/xxblebleblexx/susfs_patch/refs/heads/mainline/susfix-419.patch;wait;patch -p1 < susfix-419.patch
 
 make O=out ARCH=arm64 $defconfig; printf "Y\n2\n\n\n\nY\n" | make -j$(nproc --all) CC=clang O=out ARCH=arm64 LLVM=1 LLVM_IAS=1 LD=ld.lld AS=llvm-as AR=llvm-ar NM=llvm-nm OBJCOPY=llvm-objcopy OBJDUMP=llvm-objdump READELF=llvm-readelf STRIP=llvm-strip CROSS_COMPILE=aarch64-linux-gnu-
