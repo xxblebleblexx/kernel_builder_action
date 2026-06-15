@@ -1,11 +1,12 @@
 #CONFIGURATION
 kernelsource=https://android.googlesource.com/kernel/manifest # No need to edit
 kernelname=Galactic #Must be edited
-branch_kernel=android15-6.6-lts # Must be edited
+branch_kernel=common-android15-6.6-lts # Must be edited
 defconfig_path=arch/arm64/configs/gki_defconfig # No need to edit
 defconfig=gki_defconfig
 fast_path=$GITHUB_WORKSPACE/gki # This where kernelsource saved
-compile_type=${branch_kernel%%-*}
+helper=${branch_kernel#*-}
+compile_type=${helper%%-*}
 
 mkdir -p gki
 cd $fast_path
