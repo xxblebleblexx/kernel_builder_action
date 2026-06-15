@@ -6,14 +6,20 @@ defconfig_path=arch/arm64/configs/fire_defconfig # Must be edited
 defconfig=fire_defconfig # Must be edited
 fast_path=$GITHUB_WORKSPACE # This where kernelsource saved
 hooks=manual #only manual hook/kprobes hook, must be edited
-susfs=y # only 4.19
+susfs=y # only 4.19 y/n or u can change another susfs patch
 
 cd $fast_path
 git clone -b $branch_kernel --depth=1 $kernelsource;wait
 cd $fast_path/$kernelname
 
 #KSU DRIVER
+if [ "$susfs" = "y" ]; then
 curl -LSs "https://raw.githubusercontent.com/xxblebleblexx/MultiSU/refs/heads/legacy/kernel/setup.sh" | bash -s legacy
+fi
+
+if [ "$susfs" = "n" ]; then
+curl -LSs "https://raw.githubusercontent.com/xxblebleblexx/MultiSU/refs/heads/legacy/kernel/setup.sh" | bash -s legacy_susfs
+fi
 
 #KSU ACTIVATION
 echo "CONFIG_KSU=y" >> $defconfig_path
