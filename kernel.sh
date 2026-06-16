@@ -25,9 +25,11 @@ fi
 
 cd common
 #KSU DRIVER
-curl -LSs "https://raw.githubusercontent.com/KernelSU-Next/KernelSU-Next/next/kernel/setup.sh" | bash -s stable
+curl -LSs "https://raw.githubusercontent.com/KernelSU-Next/KernelSU-Next/next/kernel/setup.sh" | bash -s stable;wait
 #KSU ACTIVATION
 echo "CONFIG_KSU=y" >> $defconfig_path
+#verification ksu
+cat $defconfig_path | grep CONFIG_KSU=y
 
 if [ "$use_own_kernel" = "n" ]; then
 #Set name for linux kernel
