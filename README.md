@@ -7,3 +7,5 @@ before run workflow (github action) pls edit kernel.sh file
 * The Artifact (result) is always .zip so pls extract first
 * without AnyKernel3
 * configuration on kernel.sh
+## How to use?
+fork, edit kernel.sh and start the workflow of ur branch
