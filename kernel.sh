@@ -24,6 +24,10 @@ git clone -b $branch_ur_kernel --depth=1 $link_ur_kernel common
 fi
 
 cd common
+#KSU DRIVER
+curl -LSs "https://raw.githubusercontent.com/KernelSU-Next/KernelSU-Next/next/kernel/setup.sh" | bash -s stable
+#KSU ACTIVATION
+echo "CONFIG_KSU=y" >> $defconfig_path
 
 if [ "$use_own_kernel" = "n" ]; then
 #Set name for linux kernel
@@ -31,11 +35,6 @@ echo "CONFIG_LOCALVERSION=\"-$kernelname-LTS\"" >> $defconfig_path
 fi
 
 echo "CONFIG_LOCALVERSION_AUTO=n" >> $defconfig_path
-
-#KSU DRIVER
-curl -LSs "https://raw.githubusercontent.com/KernelSU-Next/KernelSU-Next/next/kernel/setup.sh" | bash -s stable
-#KSU ACTIVATION
-echo "CONFIG_KSU=y" >> $defconfig_path
 #disable post_defconfig
 sed -i 's/POST_DEFCONFIG_CMDS="check_defconfig"/POST_DEFCONFIG_CMDS=""/g' build.config.gki
 #disable abi export protection
