@@ -52,4 +52,6 @@ echo "CONFIG_KSU_SUSFS_OPEN_REDIRECT=y" >> $defconfig_path
 echo "CONFIG_KSU_SUSFS_SUS_MAP=y" >> $defconfig_path
 fi
 
-touch .scmversion; make O=out ARCH=arm64 $defconfig; printf "Y\n2\n\n\n\nY\n" | make -j$(nproc --all) CC=clang O=out ARCH=arm64 LLVM=1 LLVM_IAS=1 LD=ld.lld AS=llvm-as AR=llvm-ar NM=llvm-nm OBJCOPY=llvm-objcopy OBJDUMP=llvm-objdump READELF=llvm-readelf STRIP=llvm-strip CROSS_COMPILE=aarch64-linux-gnu- LOCALVERSION="" KBUILD_BUILD_VERSION=1
+rm -rf .git include/config/kernel.release include/generated/utsrelease.h
+
+make O=out ARCH=arm64 $defconfig; printf "Y\n2\n\n\n\nY\n" | make -j$(nproc --all) CC=clang O=out ARCH=arm64 LLVM=1 LLVM_IAS=1 LD=ld.lld AS=llvm-as AR=llvm-ar NM=llvm-nm OBJCOPY=llvm-objcopy OBJDUMP=llvm-objdump READELF=llvm-readelf STRIP=llvm-strip CROSS_COMPILE=aarch64-linux-gnu- LOCALVERSION="" KBUILD_BUILD_VERSION=1
