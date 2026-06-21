@@ -10,7 +10,7 @@ compile_type=${helper%%-*} # No need to edit
  #USE OWN SOURCE KERNEL
 use_own_kernel=y # y/n 
 link_ur_kernel=https://github.com/aosp-mirror/kernel_common.git #Must be edited
-branch_ur_kernel=common-android15-6.6 #Must be edited
+branch_ur_kernel=android15-6.6 #Must be edited
 #END_CONFIGURATION
 
 mkdir -p gki
