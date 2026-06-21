@@ -41,6 +41,7 @@ echo "CONFIG_LOCALVERSION_AUTO=n" >> $defconfig_path
 sed -i 's/POST_DEFCONFIG_CMDS="check_defconfig"/POST_DEFCONFIG_CMDS=""/g' build.config.gki
 #disable abi export protection
 sed -i 'd' android/abi_gki_protected_exports_aarch64
+wget https://raw.githubusercontent.com/CoreShiftD/CoreShift-GKI-Common/refs/heads/main/scripts/disable-kmi-check.sh;wait;chmod +x disable-kmi-check.sh;sh disable-kmi-check.sh
 #Compile
 cd ../
 
