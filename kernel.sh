@@ -16,7 +16,7 @@ branch_ur_kernel=gki-6.6 #Must be edited
 mkdir -p gki
 cd $fast_path
 #download kernel source from aosp
-repo init -u $kernelsource -b $branch_kernel --depth=1 ;wait;repo sync -c -j$(nproc) --no-clone-bundle --no-tags
+repo init -u $kernelsource -b $branch_kernel --depth=1 ;wait;repo sync -c -j$(nproc) --no-clone-bundle --no-tags;wait
 
 if [ "$use_own_kernel" = "y" ]; then
 rm -rf common
