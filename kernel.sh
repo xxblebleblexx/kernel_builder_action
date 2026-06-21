@@ -19,8 +19,8 @@ cd $fast_path
 repo init -u $kernelsource -b $branch_kernel --depth=1 ;wait;repo sync -c -j$(nproc) --no-clone-bundle --no-tags;wait
 
 if [ "$use_own_kernel" = "y" ]; then
-rm -rf common
-git clone -b $branch_ur_kernel --depth=1 $link_ur_kernel common
+rm -rf common;wait
+git clone -b $branch_ur_kernel --depth=1 $link_ur_kernel common ;wait
 fi
 
 cd common
