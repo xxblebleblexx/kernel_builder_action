@@ -1,7 +1,7 @@
 #HEAD_CONFIGURATION
 kernelsource=https://android.googlesource.com/kernel/manifest # No need to edit
 kernelname=Galactic #Must be edited
-branch_kernel=common-android15-6.6-2024-08 # Must be edited
+branch_kernel=common-android15-6.6 # Must be edited
 defconfig_path=arch/arm64/configs/gki_defconfig # No need to edit
 defconfig=gki_defconfig # No need to edit
 fast_path=$GITHUB_WORKSPACE/gki # This where kernelsource saved
@@ -16,7 +16,7 @@ branch_ur_kernel=gki-6.6 #Must be edited
 mkdir -p gki
 cd $fast_path
 #download kernel source from aosp
-repo init -u $kernelsource -b common-android15-6.6-2024-08;wait;repo sync -c -j$(nproc) --no-clone-bundle --no-tags;wait
+repo init -u $kernelsource -b $branch_kernel;wait;repo sync -c -j$(nproc) --no-clone-bundle --no-tags;wait
 
 if [ "$use_own_kernel" = "y" ]; then
 rm -rf common
