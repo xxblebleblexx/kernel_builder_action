@@ -8,9 +8,9 @@ fast_path=$GITHUB_WORKSPACE/gki # This where kernelsource saved
 helper=${branch_kernel#*-} # No need to edit
 compile_type=${helper%%-*} # No need to edit
  #USE OWN SOURCE KERNEL
-use_own_kernel=n # y/n 
-link_ur_kernel=https://github.com/xxblebleblexx/kernel_common.git #Must be edited
-branch_ur_kernel=gki-6.6 #Must be edited
+use_own_kernel=y # y/n 
+link_ur_kernel=https://github.com/aosp-mirror/kernel_common.git #Must be edited
+branch_ur_kernel=common-android15-6.6 #Must be edited
 #END_CONFIGURATION
 
 mkdir -p gki
