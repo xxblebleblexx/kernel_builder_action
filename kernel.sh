@@ -41,7 +41,6 @@ echo "CONFIG_LOCALVERSION_AUTO=n" >> $defconfig_path
 sed -i 's/POST_DEFCONFIG_CMDS="check_defconfig"/POST_DEFCONFIG_CMDS=""/g' build.config.gki
 #disable abi export protection
 sed -i 'd' android/abi_gki_protected_exports_aarch64
-sed -i '/module_outs = \[/a \        "net/ipv4/tcp_htcp.ko",\n        "net/ipv4/tcp_bic.ko",' common/BUILD.bazel
 #Compile
 cd ../
 
