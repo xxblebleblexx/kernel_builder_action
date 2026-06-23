@@ -17,7 +17,7 @@ disable_kmi_check=y # y/n - set y to disable KMI strict mode enforcement
 use_misc=n
 
  #USE OWN SOURCE KERNEL
-use_own_kernel=y # y/n 
+use_own_kernel=n # y/n 
 link_ur_kernel=https://github.com/deryardi73/kernel_common.git #Must be edited
 branch_ur_kernel=gki_6.6 #Must be edited
 
