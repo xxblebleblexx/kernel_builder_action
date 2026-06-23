@@ -30,7 +30,7 @@ repo init -u $kernelsource -b $branch_kernel --depth 1 ;wait;repo sync -c -j$(np
 
 if [ "$use_own_kernel" = "y" ]; then
 rm -rf common
-git clone -b $branch_ur_kernel --depth=1 $link_ur_kernel common
+git clone -b $branch_ur_kernel --depth=1 $link_ur_kernel common ;wait
 fi
 
 cd common
