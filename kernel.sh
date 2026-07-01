@@ -7,6 +7,7 @@ defconfig=gale_defconfig # Must be edited
 fast_path=$GITHUB_WORKSPACE # This where kernelsource saved
 hooks=manual #only manual hook/kprobes hook, must be edited
 susfs=y # only 4.19 y/n or u can change another susfs patch
+nomount=y # nomount module
 
 cd $fast_path
 git clone -b $branch_kernel --depth=1 $kernelsource;wait
@@ -50,6 +51,10 @@ echo "CONFIG_KSU_SUSFS_HIDE_KSU_SUSFS_SYMBOLS=y" >> $defconfig_path
 echo "CONFIG_KSU_SUSFS_SPOOF_CMDLINE_OR_BOOTCONFIG=y" >> $defconfig_path
 echo "CONFIG_KSU_SUSFS_OPEN_REDIRECT=y" >> $defconfig_path
 echo "CONFIG_KSU_SUSFS_SUS_MAP=y" >> $defconfig_path
+fi
+
+if [ "$nomount" = "y" ]; then
+curl -LSs "https://raw.githubusercontent.com/xxblebleblexx/nomount-installer/refs/heads/installer/nomount.sh" | bash -s 4.19
 fi
 
 make O=out ARCH=arm64 $defconfig; printf "Y\n2\n\n\n\nY\n" | make -j$(nproc --all) CC=clang O=out ARCH=arm64 LLVM=1 LLVM_IAS=1 LD=ld.lld AS=llvm-as AR=llvm-ar NM=llvm-nm OBJCOPY=llvm-objcopy OBJDUMP=llvm-objdump READELF=llvm-readelf STRIP=llvm-strip CROSS_COMPILE=aarch64-linux-gnu-
